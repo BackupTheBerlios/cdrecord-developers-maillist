@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cdrecord-developers] charsed definition file read even though charset exists
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cdrecord-developers/2014-January/index.html" >
+   <LINK REL="made" HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20charsed%20definition%20file%20read%20even%20though%0A%20charset%20exists&In-Reply-To=%3C20140108221214.GJ7134%40virt.cz.oracle.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000129.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cdrecord-developers] charsed definition file read even though charset exists</H1>
+    <B>Vladimir Marek</B> 
+    <A HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20charsed%20definition%20file%20read%20even%20though%0A%20charset%20exists&In-Reply-To=%3C20140108221214.GJ7134%40virt.cz.oracle.com%3E"
+       TITLE="[Cdrecord-developers] charsed definition file read even though charset exists">Vladimir.Marek at oracle.com
+       </A><BR>
+    <I>Wed Jan  8 23:12:14 CET 2014</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000129.html">[Cdrecord-developers] charsed definition file read even though charset exists
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#128">[ date ]</a>
+              <a href="thread.html#128">[ thread ]</a>
+              <a href="subject.html#128">[ subject ]</a>
+              <a href="author.html#128">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I would like to follow up with this old thread to finish what we
+started. The problem was that there was not a way how to specify which
+siconv table should be used. Specifying just it's name first looks into
+current directory whether there is such file, which can lead to various
+side effects.
+
+Your proposal was:
+
+&gt;<i> My proposal was:
+</I>&gt;<i> 
+</I>&gt;<i> 1) try to open as filename in case the parameter is a string contraining a '/'.
+</I>&gt;<i> 2) try to open path based on getexecname
+</I>&gt;<i> 3) try to open via INS_BASE/lib/siconv/* 
+</I>
+How would you feel about the attached patch?
+
+Thank you
+-- 
+	Vlad
+-------------- next part --------------
+--- libsiconv/sic_nls.c.orig	st led  8 18:08:37 2014
++++ libsiconv/sic_nls.c	st led  8 18:10:09 2014
+@@ -288,11 +288,10 @@
+ 	char	*p;
+ 	FILE	*f;
+ 
+-	if ((f = fopen(name, &quot;r&quot;)) != NULL)
+-		return (f);
+-
++	/* If the name contains slash, try to open it directly. If it fails, do
++	 * not attempt anything else. */
+ 	if (strchr(name, '/'))
+-		return ((FILE *)NULL);
++		return (fopen(name, &quot;r&quot;));
+ 
+ 	if (ins_base == NULL)
+ 		(void) sic_base();
+</PRE>
+
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000129.html">[Cdrecord-developers] charsed definition file read even though charset exists
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#128">[ date ]</a>
+              <a href="thread.html#128">[ thread ]</a>
+              <a href="subject.html#128">[ subject ]</a>
+              <a href="author.html#128">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">More information about the Cdrecord-developers
+mailing list</a><br>
+</body></html>

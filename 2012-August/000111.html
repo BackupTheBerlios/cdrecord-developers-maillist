@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cdrecord-developers] charsed definition file read even though	charset exists
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cdrecord-developers/2012-August/index.html" >
+   <LINK REL="made" HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20charsed%20definition%20file%20read%20even%20though%0A%09charset%20exists&In-Reply-To=%3C20120830152206.GF19393%40tbd.cz.oracle.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000110.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cdrecord-developers] charsed definition file read even though	charset exists</H1>
+    <B>Vladimir Marek</B> 
+    <A HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20charsed%20definition%20file%20read%20even%20though%0A%09charset%20exists&In-Reply-To=%3C20120830152206.GF19393%40tbd.cz.oracle.com%3E"
+       TITLE="[Cdrecord-developers] charsed definition file read even though	charset exists">Vladimir.Marek at Oracle.COM
+       </A><BR>
+    <I>Thu Aug 30 17:22:07 CEST 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000110.html">[Cdrecord-developers] Cdrecord-3.01a08 released
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#111">[ date ]</a>
+              <a href="thread.html#111">[ thread ]</a>
+              <a href="subject.html#111">[ subject ]</a>
+              <a href="author.html#111">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+mkisofs man page says:
+
+     If using non iconv(1) based character sets, additional char-
+     acter  sets  can  be read from file for any of the character
+     set options by giving a filename  as  the  argument  to  the
+     options.  The  given file will only be read if its name does
+     not match one of the built in character sets.
+
+That does not seem to be happening, the given file name is read even if the
+built in character set exists.
+
+
+$ truss -t open mkisofs -input-charset iso8859-1
+open(&quot;/var/ld/ld.config&quot;, O_RDONLY)             Err#2 ENOENT
+open(&quot;/lib/libc.so.1&quot;, O_RDONLY)                = 3
+open(&quot;iso8859-1&quot;, O_RDONLY)                     Err#2 ENOENT     &lt;---------------
+open(&quot;/usr/lib/siconv/iso8859-1&quot;, O_RDONLY)     = 3     &lt;---------------
+open(&quot;cp10000&quot;, O_RDONLY)                       Err#2 ENOENT
+open(&quot;/usr/lib/siconv/cp10000&quot;, O_RDONLY)       = 3
+
+
+
+
+I tried it on linux too:
+
+$ strace ./a/cdrtools-3.01/mkisofs/OBJ/i686-linux-cc/mkisofs -input-charset iso8859-2 -o a.iso b 2&gt;&amp;1 | grep 8859
+execve(&quot;./a/cdrtools-3.01/mkisofs/OBJ/i686-linux-cc/mkisofs&quot;, [&quot;./a/cdrtools-3.01/mkisofs/OBJ/i6&quot;..., &quot;-input-charset&quot;, &quot;iso8859-2&quot;, &quot;-o&quot;, &quot;a.iso&quot;, &quot;b&quot;], [/* 82 vars */]) = 0
+open(&quot;iso8859-2&quot;, O_RDONLY)             = -1 ENOENT (No such file or directory)    &lt;--------------
+stat64(&quot;/home/neuron/Downloads/a/cdrtools-3.01/mkisofs/OBJ/i686-linux-cc/lib/siconv/iso8859-1&quot;, 0xbfa01830) = -1 ENOENT (No such file or directory)
+stat64(&quot;/usr/lib/siconv/iso8859-1&quot;, 0xbfa01830) = -1 ENOENT (No such file or directory)  &lt;--------------
+...
+
+
+It seems to be caused by pfopen function:
+
+LOCAL FILE *
+pfopen(name)
+        char    *name;
+{
+        char    path[1024];
+        FILE    *f;
+
+        if ((f = fopen(name, &quot;r&quot;)) != NULL)          &lt;---------------
+                return (f);
+
+        if (strchr(name, '/'))
+                return ((FILE *)NULL);
+
+        snprintf(path, sizeof (path), &quot;%s/lib/siconv/%s&quot;, INS_BASE, name);
+        return (fopen(path, &quot;r&quot;));          &lt;---------------
+}
+
+
+Shouldn't the two fopen calls be reversed?
+
+Thank you
+-- 
+	Vlad
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000110.html">[Cdrecord-developers] Cdrecord-3.01a08 released
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#111">[ date ]</a>
+              <a href="thread.html#111">[ thread ]</a>
+              <a href="subject.html#111">[ subject ]</a>
+              <a href="author.html#111">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">More information about the Cdrecord-developers
+mailing list</a><br>
+</body></html>

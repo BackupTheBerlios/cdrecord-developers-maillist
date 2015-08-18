@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cdrecord-developers] Bug? cdrecord hangs and uses up to 100%	cpu
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cdrecord-developers/2009-March/index.html" >
+   <LINK REL="made" HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20Bug%3F%20cdrecord%20hangs%20and%20uses%20up%20to%20100%25%0A%09cpu&In-Reply-To=%3C200903261237.27269.trueg%40k3b.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000068.html">
+   <LINK REL="Next"  HREF="000070.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cdrecord-developers] Bug? cdrecord hangs and uses up to 100%	cpu</H1>
+    <B>Sebastian Tr&#252;g</B> 
+    <A HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20Bug%3F%20cdrecord%20hangs%20and%20uses%20up%20to%20100%25%0A%09cpu&In-Reply-To=%3C200903261237.27269.trueg%40k3b.org%3E"
+       TITLE="[Cdrecord-developers] Bug? cdrecord hangs and uses up to 100%	cpu">trueg at k3b.org
+       </A><BR>
+    <I>Thu Mar 26 12:37:26 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000068.html">[Cdrecord-developers] Bug? cdrecord hangs and uses up to 100%	cpu
+</A></li>
+        <LI>Next message: <A HREF="000070.html">[Cdrecord-developers] Bug? cdrecord hangs and uses up to 100%	cpu
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#69">[ date ]</a>
+              <a href="thread.html#69">[ thread ]</a>
+              <a href="subject.html#69">[ subject ]</a>
+              <a href="author.html#69">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thursday 26 March 2009 12:19:12 Joerg Schilling wrote:
+&gt;<i> Sebastian Tr&#252;g &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">trueg at k3b.org</A>&gt; wrote:
+</I>&gt;<i> &gt; I think I found a bug or at least a problem. This is the command line
+</I>&gt;<i> &gt; using cdrecord 2.01.01a57:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; cdrecord -v gracetime=2 dev=/dev/hda speed=40 -sao -dummy
+</I>&gt;<i> &gt; driveropts=burnfree textfile=/tmp/Sn6771.dat -multi -useinfo -audio -pad
+</I>&gt;<i> &gt; -shorttrack /tmp/kde- kde4dev/k3b_audio_0_01.wav
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; The problem is the textfile which is empty. Without it burning works
+</I>&gt;<i> &gt; flawlessly. Now obviously using an empty textfile is bogus but it should
+</I>&gt;<i> &gt; not make cdrecord go crazy, right?
+</I>&gt;<i>
+</I>&gt;<i> I cannot reproduce a hang with an empty textfile. Could you call:
+</I>&gt;<i>
+</I>&gt;<i> gcore &lt;pid of cdrecord&gt;
+</I>&gt;<i> and use the debugger or
+</I>&gt;<i>
+</I>&gt;<i> run
+</I>&gt;<i> pstack  &lt;pid of cdrecord&gt;
+</I>&gt;<i>
+</I>&gt;<i> to find where the hang is?
+</I>
+would love to but I dont have any of those commands. pstack failed to compile 
+here on amd64 and gcore is not available at all... :(
+Any other output I may produce? I could compile cdrecord with debugging 
+symbols...
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000068.html">[Cdrecord-developers] Bug? cdrecord hangs and uses up to 100%	cpu
+</A></li>
+	<LI>Next message: <A HREF="000070.html">[Cdrecord-developers] Bug? cdrecord hangs and uses up to 100%	cpu
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#69">[ date ]</a>
+              <a href="thread.html#69">[ thread ]</a>
+              <a href="subject.html#69">[ subject ]</a>
+              <a href="author.html#69">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">More information about the Cdrecord-developers
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cdrecord-developers] [Patch] -as-needed compatibility
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cdrecord-developers/2007-September/index.html" >
+   <LINK REL="made" HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20%5BPatch%5D%20-as-needed%20compatibility&In-Reply-To=%3C20070905115245.GA10409%40section_eight%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000024.html">
+   <LINK REL="Next"  HREF="000026.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cdrecord-developers] [Patch] -as-needed compatibility</H1>
+    <B>Sebastian Kemper</B> 
+    <A HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20%5BPatch%5D%20-as-needed%20compatibility&In-Reply-To=%3C20070905115245.GA10409%40section_eight%3E"
+       TITLE="[Cdrecord-developers] [Patch] -as-needed compatibility">sebastian_ml at gmx.net
+       </A><BR>
+    <I>Wed Sep  5 13:52:45 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000024.html">[Cdrecord-developers] Cdrtools-2.01.01a35 ready
+</A></li>
+        <LI>Next message: <A HREF="000026.html">[Cdrecord-developers] [Patch] -as-needed compatibility
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#25">[ date ]</a>
+              <a href="thread.html#25">[ thread ]</a>
+              <a href="subject.html#25">[ subject ]</a>
+              <a href="author.html#25">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Attached is the cdrtools-2.01.01_alpha34-asneeded patch as submitted to
+<A HREF="https://bugs.gentoo.org/show_bug.cgi?id=190180">https://bugs.gentoo.org/show_bug.cgi?id=190180</A> by Samuli Suominen.
+
+Maybe you can include it in a future cdrtools version.
+
+Thanks!
+
+Regards
+Sebastian
+-------------- next part --------------
+diff -ur cdrtools-2.01.01.orig/libfind/libfind.mk cdrtools-2.01.01/libfind/libfind.mk
+--- cdrtools-2.01.01.orig/libfind/libfind.mk	2007-02-04 01:00:05.000000000 +0200
++++ cdrtools-2.01.01/libfind/libfind.mk	2007-08-28 22:33:25.000000000 +0300
+@@ -20,7 +20,7 @@
+ CPPOPTS +=	-DSCHILY_PRINT
+ 
+ include		Targets
+-LIBS=		
++LIBS=		$(LIB_ACL)
+ 
+ ###########################################################################
+ include		$(SRCROOT)/$(RULESDIR)/rules.lib
+diff -ur cdrtools-2.01.01.orig/libfind/libfind_p.mk cdrtools-2.01.01/libfind/libfind_p.mk
+--- cdrtools-2.01.01.orig/libfind/libfind_p.mk	2007-06-30 14:13:34.000000000 +0300
++++ cdrtools-2.01.01/libfind/libfind_p.mk	2007-08-28 22:34:04.000000000 +0300
+@@ -22,7 +22,7 @@
+ CPPOPTS +=	-DSCHILY_PRINT
+ 
+ include		Targets
+-LIBS=		
++LIBS=		$(LIB_ACL)
+ 
+ ###########################################################################
+ include		$(SRCROOT)/$(RULESDIR)/rules.lib
+diff -ur cdrtools-2.01.01.orig/libfind/shlfind.mk cdrtools-2.01.01/libfind/shlfind.mk
+--- cdrtools-2.01.01.orig/libfind/shlfind.mk	2007-02-04 01:00:05.000000000 +0200
++++ cdrtools-2.01.01/libfind/shlfind.mk	2007-08-28 22:45:14.000000000 +0300
+@@ -21,7 +21,7 @@
+ CPPOPTS +=	-DSCHILY_PRINT
+ 
+ include		Targets
+-LIBS=		-lschily -lc
++LIBS=		-lschily -lc $(LIB_ACL)
+ 
+ ###########################################################################
+ include		$(SRCROOT)/$(RULESDIR)/rules.shl
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000024.html">[Cdrecord-developers] Cdrtools-2.01.01a35 ready
+</A></li>
+	<LI>Next message: <A HREF="000026.html">[Cdrecord-developers] [Patch] -as-needed compatibility
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#25">[ date ]</a>
+              <a href="thread.html#25">[ thread ]</a>
+              <a href="subject.html#25">[ subject ]</a>
+              <a href="author.html#25">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">More information about the Cdrecord-developers
+mailing list</a><br>
+</body></html>

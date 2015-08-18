@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cdrecord-developers] charsed definition file read even though charset exists
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cdrecord-developers/2014-January/index.html" >
+   <LINK REL="made" HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20charsed%20definition%20file%20read%20even%20though%0A%20charset%20exists&In-Reply-To=%3C52d416d8.wmSDDfzRQp2Y1BlB%25Joerg.Schilling%40fokus.fraunhofer.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000130.html">
+   <LINK REL="Next"  HREF="000133.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cdrecord-developers] charsed definition file read even though charset exists</H1>
+    <B>Joerg Schilling</B> 
+    <A HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20charsed%20definition%20file%20read%20even%20though%0A%20charset%20exists&In-Reply-To=%3C52d416d8.wmSDDfzRQp2Y1BlB%25Joerg.Schilling%40fokus.fraunhofer.de%3E"
+       TITLE="[Cdrecord-developers] charsed definition file read even though charset exists">Joerg.Schilling at fokus.fraunhofer.de
+       </A><BR>
+    <I>Mon Jan 13 17:39:52 CET 2014</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000130.html">[Cdrecord-developers] charsed definition file read even though charset exists
+</A></li>
+        <LI>Next message: <A HREF="000133.html">[Cdrecord-developers] charsed definition file read even though charset exists
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#131">[ date ]</a>
+              <a href="thread.html#131">[ thread ]</a>
+              <a href="subject.html#131">[ subject ]</a>
+              <a href="author.html#131">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Vladimir Marek &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">Vladimir.Marek at oracle.com</A>&gt; wrote:
+
+&gt;<i> &gt; BTW: a month ago, I received a mail from a friend that claims that Oracle 
+</I>&gt;<i> &gt; Solaris-11.1 is shipped with a very old version of cdrtools (2.01 from 2004).
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Could you comment this please?
+</I>&gt;<i>
+</I>&gt;<i> Solaris 10 - cdrtools 2.01
+</I>&gt;<i> Solaris 11 - cdrtools 3.00
+</I>&gt;<i>
+</I>&gt;<i> Solaris 10 is in sustaining mode only, only if customer reports an issue
+</I>&gt;<i> or there's security problem we do something about it. And even then
+</I>&gt;<i> usually just the smallest change, so probably just patch fixing the one
+</I>&gt;<i> issue.
+</I>&gt;<i>
+</I>&gt;<i> Solaris 10 is 9 years old if I count right.
+</I>&gt;<i>
+</I>&gt;<i> Now on bare 11.1 (without any additional changes released later):
+</I>&gt;<i>
+</I>&gt;<i> &gt; $ pkg list entire
+</I>&gt;<i> &gt; NAME (PUBLISHER)                                  VERSION                    IFO
+</I>&gt;<i> &gt; entire                                            0.5.11-0.175.1.0.0.24.2    i--
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; $ cat /etc/release 
+</I>&gt;<i> &gt;                              Oracle Solaris 11.1 X86
+</I>&gt;<i> &gt;   Copyright (c) 1983, 2012, Oracle and/or its affiliates.  All rights reserved.
+</I>&gt;<i> &gt;                            Assembled 19 September 2012
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; $ /usr/bin/cdrecord -version
+</I>&gt;<i> &gt; Cdrecord-ProDVD-ProBD-Clone 3.00 (i386-pc-solaris2.11) Copyright (C) 1995-2010 J???rg Schilling
+</I>
+OK, then I need to ask this friend to find out what he did wrong.
+
+&gt;<i> I just noticed that your name is not displayed correctly (umlaut o), but
+</I>&gt;<i> that seems to be because I'm using utf-8 output (I am normally able to
+</I>&gt;<i> read and write &#246;)
+</I>
+This is a general problem that is not easy to fix.
+I am using iso-8859-1 and we are talking about a character that has the same 
+code in iso-8859-1 and Unicode ;-)
+
+Once I created a set of gettext() message objects, I may make use of the 
+trans-coding features in gettext() to work around the problem.
+
+&gt;<i> In 11 and current development version we are using 3.00 which is still
+</I>&gt;<i> old. I know we discussed it back then and I was surprised that you are
+</I>&gt;<i> suggesting your alpha releases. I brought that to our attention this
+</I>&gt;<i> morning internally that we should update to latest. The thing is that we
+</I>&gt;<i> have bunch of custom patches[1] which make possible to make Solaris
+</I>&gt;<i> bootable.
+</I>
+It seems that you need the patches because you are using an old version of 
+cdrtoos.
+
+BTW: the recent version no longer needs a shell script to do the pfexec and I 
+am plannuing to enhance Solaris to even avoid the re-exec() that is still 
+needed to get the needed privileges.
+
+&gt;<i> Also, even though I can speak German a tiny bit (I have been working in
+</I>&gt;<i> M&#252;nchen for some time), I am a bit lost in the Changelog :)
+</I>
+Where are you located?
+
+J&#246;rg
+
+-- 
+ EMail:<A HREF="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">joerg at schily.isdn.cs.tu-berlin.de</A> (home) J&#246;rg Schilling D-13353 Berlin
+       <A HREF="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">js at cs.tu-berlin.de</A>                (uni)  
+       <A HREF="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">joerg.schilling at fokus.fraunhofer.de</A> (work) Blog: <A HREF="http://schily.blogspot.com/">http://schily.blogspot.com/</A>
+ URL:  <A HREF="http://cdrecord.berlios.de/private/">http://cdrecord.berlios.de/private/</A> <A HREF="ftp://ftp.berlios.de/pub/schily">ftp://ftp.berlios.de/pub/schily</A>
+</PRE>
+
+
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000130.html">[Cdrecord-developers] charsed definition file read even though charset exists
+</A></li>
+	<LI>Next message: <A HREF="000133.html">[Cdrecord-developers] charsed definition file read even though charset exists
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#131">[ date ]</a>
+              <a href="thread.html#131">[ thread ]</a>
+              <a href="subject.html#131">[ subject ]</a>
+              <a href="author.html#131">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">More information about the Cdrecord-developers
+mailing list</a><br>
+</body></html>

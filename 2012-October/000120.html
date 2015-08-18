@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cdrecord-developers] Native Windows version
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cdrecord-developers/2012-October/index.html" >
+   <LINK REL="made" HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20Native%20Windows%20version&In-Reply-To=%3CCAKcBoksdcaNdyaUBrxQoKsXJ7mqXs%3DkcnWQiX2PUFkbC4oAZ3Q%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000119.html">
+   <LINK REL="Next"  HREF="000122.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cdrecord-developers] Native Windows version</H1>
+    <B>Pau Garcia i Quiles</B> 
+    <A HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20Native%20Windows%20version&In-Reply-To=%3CCAKcBoksdcaNdyaUBrxQoKsXJ7mqXs%3DkcnWQiX2PUFkbC4oAZ3Q%40mail.gmail.com%3E"
+       TITLE="[Cdrecord-developers] Native Windows version">pgquiles at elpauer.org
+       </A><BR>
+    <I>Thu Oct  4 17:04:46 CEST 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000119.html">[Cdrecord-developers] Native Windows version
+</A></li>
+        <LI>Next message: <A HREF="000122.html">[Cdrecord-developers] Native Windows version
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#120">[ date ]</a>
+              <a href="thread.html#120">[ thread ]</a>
+              <a href="subject.html#120">[ subject ]</a>
+              <a href="author.html#120">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thu, Oct 4, 2012 at 12:45 PM, Joerg Schilling
+&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">Joerg.Schilling at fokus.fraunhofer.de</A>&gt; wrote:
+
+&gt;&gt;<i> Has anyone succeeded in compiling a cdrtools for Windows using MinGW
+</I>&gt;&gt;<i> and/or Visual C++? I mean a truly *native* executable, not a Cygwin
+</I>&gt;&gt;<i> one
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I am interested mostly in mkisofs.
+</I>&gt;<i>
+</I>&gt;<i> mkisofs will not work correctly as Microsoft ships with a broken libc that
+</I>&gt;<i> returns 0 with stat() in st_ino for all files.
+</I>&gt;<i>
+</I>&gt;<i> This causes mkisofs to assume that all files are hardlinked .....
+</I>&gt;<i>
+</I>&gt;<i> and it is of course a hard violation of the POSIX standard.
+</I>
+Oh well, the problem is not really stat() in Microsoft CRT but the
+underlying filesystem: FAT, HPFS and NTFS do not have the notion of
+inodes (at least not in the same sense other POSIX and Unix have),
+therefore st_ino makes no sense there.
+
+<A HREF="http://msdn.microsoft.com/en-us/library/14h5k7ff(v=vs.110">http://msdn.microsoft.com/en-us/library/14h5k7ff(v=vs.110</A>).aspx
+
+Could that be solved by using some equivalent in NTFS? Sure,
+GetFileInformationByHandle and
+BY_HANDLE_FILE_INFORMATION-&gt;nNumberOfLinks come to mind. But then it's
+not st_ino but something else.
+
+<A HREF="http://msdn.microsoft.com/en-us/library/windows/desktop/aa364952(v=vs.85">http://msdn.microsoft.com/en-us/library/windows/desktop/aa364952(v=vs.85</A>).aspx
+<A HREF="http://msdn.microsoft.com/en-us/library/windows/desktop/aa363788(v=vs.85">http://msdn.microsoft.com/en-us/library/windows/desktop/aa363788(v=vs.85</A>).aspx
+
+The fact that stat() in Microsoft CRT behaves differently is only an
+obstacle for compiling unmodified code, not a roadblocker. It could be
+solved by having a Windows-specific implementation of the parts that
+check for the number of hardlinks. Or even implementing a
+Windows-savvy stat() in libschily.
+
+Anyway, the biggest hurdle for me at this moment is the build system.
+Apparently it relies heavily on a Bourne Shell being available and
+apparently MSYS is not up to the task :-(
+
+Thank you
+
+-- 
+Pau Garcia i Quiles
+<A HREF="http://www.elpauer.org">http://www.elpauer.org</A>
+(Due to my workload, I may need 10 days to answer)
+</PRE>
+
+
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000119.html">[Cdrecord-developers] Native Windows version
+</A></li>
+	<LI>Next message: <A HREF="000122.html">[Cdrecord-developers] Native Windows version
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#120">[ date ]</a>
+              <a href="thread.html#120">[ thread ]</a>
+              <a href="subject.html#120">[ subject ]</a>
+              <a href="author.html#120">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">More information about the Cdrecord-developers
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cdrecord-developers] charsed definition file read even though charset exists
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cdrecord-developers/2012-September/index.html" >
+   <LINK REL="made" HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20charsed%20definition%20file%20read%20even%20though%0A%20charset%20exists&In-Reply-To=%3C5044ad62.E1wR%2BNY1uLIAJT2c%25Joerg.Schilling%40fokus.fraunhofer.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000113.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cdrecord-developers] charsed definition file read even though charset exists</H1>
+    <B>Joerg Schilling</B> 
+    <A HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20charsed%20definition%20file%20read%20even%20though%0A%20charset%20exists&In-Reply-To=%3C5044ad62.E1wR%2BNY1uLIAJT2c%25Joerg.Schilling%40fokus.fraunhofer.de%3E"
+       TITLE="[Cdrecord-developers] charsed definition file read even though charset exists">Joerg.Schilling at fokus.fraunhofer.de
+       </A><BR>
+    <I>Mon Sep  3 15:15:14 CEST 2012</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000113.html">[Cdrecord-developers] charsed definition file read even though charset exists
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#112">[ date ]</a>
+              <a href="thread.html#112">[ thread ]</a>
+              <a href="subject.html#112">[ subject ]</a>
+              <a href="author.html#112">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Vladimir Marek &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">Vladimir.Marek at Oracle.COM</A>&gt; wrote:
+
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> mkisofs man page says:
+</I>&gt;<i>
+</I>&gt;<i>      If using non iconv(1) based character sets, additional char-
+</I>&gt;<i>      acter  sets  can  be read from file for any of the character
+</I>&gt;<i>      set options by giving a filename  as  the  argument  to  the
+</I>&gt;<i>      options.  The  given file will only be read if its name does
+</I>&gt;<i>      not match one of the built in character sets.
+</I>&gt;<i>
+</I>&gt;<i> That does not seem to be happening, the given file name is read even if the
+</I>&gt;<i> built in character set exists.
+</I>
+Sure?
+
+What do you believe is your problem?
+
+
+
+&gt;<i>
+</I>&gt;<i> $ truss -t open mkisofs -input-charset iso8859-1
+</I>&gt;<i> open(&quot;/var/ld/ld.config&quot;, O_RDONLY)             Err#2 ENOENT
+</I>&gt;<i> open(&quot;/lib/libc.so.1&quot;, O_RDONLY)                = 3
+</I>&gt;<i> open(&quot;iso8859-1&quot;, O_RDONLY)                     Err#2 ENOENT     &lt;---------------
+</I>&gt;<i> open(&quot;/usr/lib/siconv/iso8859-1&quot;, O_RDONLY)     = 3     &lt;---------------
+</I>&gt;<i> open(&quot;cp10000&quot;, O_RDONLY)                       Err#2 ENOENT
+</I>&gt;<i> open(&quot;/usr/lib/siconv/cp10000&quot;, O_RDONLY)       = 3
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> I tried it on linux too:
+</I>&gt;<i>
+</I>&gt;<i> $ strace ./a/cdrtools-3.01/mkisofs/OBJ/i686-linux-cc/mkisofs -input-charset iso8859-2 -o a.iso b 2&gt;&amp;1 | grep 8859
+</I>&gt;<i> execve(&quot;./a/cdrtools-3.01/mkisofs/OBJ/i686-linux-cc/mkisofs&quot;, [&quot;./a/cdrtools-3.01/mkisofs/OBJ/i6&quot;..., &quot;-input-charset&quot;, &quot;iso8859-2&quot;, &quot;-o&quot;, &quot;a.iso&quot;, &quot;b&quot;], [/* 82 vars */]) = 0
+</I>&gt;<i> open(&quot;iso8859-2&quot;, O_RDONLY)             = -1 ENOENT (No such file or directory)    &lt;--------------
+</I>&gt;<i> stat64(&quot;/home/neuron/Downloads/a/cdrtools-3.01/mkisofs/OBJ/i686-linux-cc/lib/siconv/iso8859-1&quot;, 0xbfa01830) = -1 ENOENT (No such file or directory)
+</I>&gt;<i> stat64(&quot;/usr/lib/siconv/iso8859-1&quot;, 0xbfa01830) = -1 ENOENT (No such file or directory)  &lt;--------------
+</I>&gt;<i> ...
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> It seems to be caused by pfopen function:
+</I>&gt;<i>
+</I>&gt;<i> LOCAL FILE *
+</I>&gt;<i> pfopen(name)
+</I>&gt;<i>         char    *name;
+</I>&gt;<i> {
+</I>&gt;<i>         char    path[1024];
+</I>&gt;<i>         FILE    *f;
+</I>&gt;<i>
+</I>&gt;<i>         if ((f = fopen(name, &quot;r&quot;)) != NULL)          &lt;---------------
+</I>&gt;<i>                 return (f);
+</I>&gt;<i>
+</I>&gt;<i>         if (strchr(name, '/'))
+</I>&gt;<i>                 return ((FILE *)NULL);
+</I>&gt;<i>
+</I>&gt;<i>         snprintf(path, sizeof (path), &quot;%s/lib/siconv/%s&quot;, INS_BASE, name);
+</I>&gt;<i>         return (fopen(path, &quot;r&quot;));          &lt;---------------
+</I>&gt;<i> }
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Shouldn't the two fopen calls be reversed?
+</I>
+This  is an outdated version of libsiconv. Why do you use an outdated version?
+
+Since 2010, libsiconv uses a dynamic method to find it's installation base.
+
+J&#246;rg
+
+-- 
+ EMail:<A HREF="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">joerg at schily.isdn.cs.tu-berlin.de</A> (home) J&#246;rg Schilling D-13353 Berlin
+       <A HREF="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">js at cs.tu-berlin.de</A>                (uni)  
+       <A HREF="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">joerg.schilling at fokus.fraunhofer.de</A> (work) Blog: <A HREF="http://schily.blogspot.com/">http://schily.blogspot.com/</A>
+ URL:  <A HREF="http://cdrecord.berlios.de/private/">http://cdrecord.berlios.de/private/</A> <A HREF="ftp://ftp.berlios.de/pub/schily">ftp://ftp.berlios.de/pub/schily</A>
+</PRE>
+
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000113.html">[Cdrecord-developers] charsed definition file read even though charset exists
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#112">[ date ]</a>
+              <a href="thread.html#112">[ thread ]</a>
+              <a href="subject.html#112">[ subject ]</a>
+              <a href="author.html#112">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">More information about the Cdrecord-developers
+mailing list</a><br>
+</body></html>

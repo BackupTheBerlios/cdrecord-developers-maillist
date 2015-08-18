@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cdrecord-developers] CD Drive eject status
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cdrecord-developers/2009-March/index.html" >
+   <LINK REL="made" HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20CD%20Drive%20eject%20status&In-Reply-To=%3C49bf6e5c.PxaD1iheq/SJVUa9%25Joerg.Schilling%40fokus.fraunhofer.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000065.html">
+   <LINK REL="Next"  HREF="000067.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cdrecord-developers] CD Drive eject status</H1>
+    <B>Joerg Schilling</B> 
+    <A HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20CD%20Drive%20eject%20status&In-Reply-To=%3C49bf6e5c.PxaD1iheq/SJVUa9%25Joerg.Schilling%40fokus.fraunhofer.de%3E"
+       TITLE="[Cdrecord-developers] CD Drive eject status">Joerg.Schilling at fokus.fraunhofer.de
+       </A><BR>
+    <I>Tue Mar 17 10:33:16 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000065.html">[Cdrecord-developers] CD Drive eject status
+</A></li>
+        <LI>Next message: <A HREF="000067.html">[Cdrecord-developers] Bug? cdrecord hangs and uses up to 100% cpu
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#66">[ date ]</a>
+              <a href="thread.html#66">[ thread ]</a>
+              <a href="subject.html#66">[ subject ]</a>
+              <a href="author.html#66">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Naveen S &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">naveenmailid at yahoo.com</A>&gt; wrote:
+
+&gt;<i> Can somebody help me, how to know whether CD drive is in open status or closed status in 
+</I>&gt;<i> Solaris 10. 
+</I>
+Unfortunately few drives support to ask for this status, therefore it is not 
+implemented in cdrtools.
+
+Check this:
+
+readcd dev=0,0,0 sectors=0-0 f=/dev/null
+Read  speed:  8467 kB/s (CD  48x, DVD  6x, BD  1x).
+Write speed:     0 kB/s (CD   0x, DVD  0x, BD  0x).
+/usr/bin/readcd.bin: I/O error. test unit ready: scsi sendcmd: no error
+CDB:  00 00 00 00 00 00
+status: 0x2 (CHECK CONDITION)
+Sense Bytes: 70 00 02 00 00 00 00 0A 00 00 00 00 3A 02 00 00 00 00
+Sense Key: 0x2 Not Ready, Segment 0
+Sense Code: 0x3A Qual 0x02 (medium not present - tray open) Fru 0x0
+Sense flags: Blk 0 (not valid) 
+cmd finished after 0.000s timeout 40s
+/usr/bin/readcd.bin: Device not ready.
+
+This an open tray
+
+Or this:
+
+readcd dev=0,0,0 sectors=0-0 f=/dev/null
+Read  speed:  8467 kB/s (CD  48x, DVD  6x, BD  1x).
+Write speed:     0 kB/s (CD   0x, DVD  0x, BD  0x).
+/usr/bin/readcd.bin: I/O error. test unit ready: scsi sendcmd: no error
+CDB:  00 00 00 00 00 00
+status: 0x2 (CHECK CONDITION)
+Sense Bytes: 70 00 02 00 00 00 00 0A 00 00 00 00 3A 01 00 00 00 00
+Sense Key: 0x2 Not Ready, Segment 0
+Sense Code: 0x3A Qual 0x01 (medium not present - tray closed) Fru 0x0
+Sense flags: Blk 0 (not valid) 
+cmd finished after 0.000s timeout 40s
+/usr/bin/readcd.bin: Device not ready.
+
+This is a closed but empty tray
+
+And finally:
+
+readcd dev=0,0,0 sectors=0-0 f=/dev/null
+Read  speed:  5645 kB/s (CD  32x, DVD  4x, BD  1x).
+Write speed:     0 kB/s (CD   0x, DVD  0x, BD  0x).
+Capacity: 246572 Blocks = 493144 kBytes = 481 MBytes = 504 prMB
+Sectorsize: 2048 Bytes
+Copy from SCSI (0,0,0) disk to file '/dev/null'
+end:         0
+addr:        0
+Time total: 0.000sec
+Read 0.00 kB at 0.0 kB/sec.
+
+This is a closed tray with a CD inside.
+
+J&#246;rg
+
+-- 
+ EMail:<A HREF="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">joerg at schily.isdn.cs.tu-berlin.de</A> (home) J&#246;rg Schilling D-13353 Berlin
+       <A HREF="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">js at cs.tu-berlin.de</A>                (uni)  
+       <A HREF="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">joerg.schilling at fokus.fraunhofer.de</A> (work) Blog: <A HREF="http://schily.blogspot.com/">http://schily.blogspot.com/</A>
+ URL:  <A HREF="http://cdrecord.berlios.de/private/">http://cdrecord.berlios.de/private/</A> <A HREF="ftp://ftp.berlios.de/pub/schily">ftp://ftp.berlios.de/pub/schily</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000065.html">[Cdrecord-developers] CD Drive eject status
+</A></li>
+	<LI>Next message: <A HREF="000067.html">[Cdrecord-developers] Bug? cdrecord hangs and uses up to 100% cpu
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#66">[ date ]</a>
+              <a href="thread.html#66">[ thread ]</a>
+              <a href="subject.html#66">[ subject ]</a>
+              <a href="author.html#66">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">More information about the Cdrecord-developers
+mailing list</a><br>
+</body></html>

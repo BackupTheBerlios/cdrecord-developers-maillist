@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cdrecord-developers] charsed definition file read even though charset exists
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cdrecord-developers/2012-September/index.html" >
+   <LINK REL="made" HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20charsed%20definition%20file%20read%20even%20though%0A%20charset%20exists&In-Reply-To=%3C20120903140308.GA407%40tbd.cz.oracle.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000112.html">
+   <LINK REL="Next"  HREF="000114.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cdrecord-developers] charsed definition file read even though charset exists</H1>
+    <B>Vladimir Marek</B> 
+    <A HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20charsed%20definition%20file%20read%20even%20though%0A%20charset%20exists&In-Reply-To=%3C20120903140308.GA407%40tbd.cz.oracle.com%3E"
+       TITLE="[Cdrecord-developers] charsed definition file read even though charset exists">Vladimir.Marek at Oracle.COM
+       </A><BR>
+    <I>Mon Sep  3 16:03:08 CEST 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000112.html">[Cdrecord-developers] charsed definition file read even though charset exists
+</A></li>
+        <LI>Next message: <A HREF="000114.html">[Cdrecord-developers] charsed definition file read even though charset exists
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#113">[ date ]</a>
+              <a href="thread.html#113">[ thread ]</a>
+              <a href="subject.html#113">[ subject ]</a>
+              <a href="author.html#113">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;<i> &gt; mkisofs man page says:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;      If using non iconv(1) based character sets, additional char-
+</I>&gt;<i> &gt;      acter  sets  can  be read from file for any of the character
+</I>&gt;<i> &gt;      set options by giving a filename  as  the  argument  to  the
+</I>&gt;<i> &gt;      options.  The  given file will only be read if its name does
+</I>&gt;<i> &gt;      not match one of the built in character sets.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; That does not seem to be happening, the given file name is read even if the
+</I>&gt;<i> &gt; built in character set exists.
+</I>&gt;<i> 
+</I>&gt;<i> Sure?
+</I>&gt;<i> 
+</I>&gt;<i> What do you believe is your problem?
+</I>
+I want mkisofs to use only builtin character set definitions. Because it
+already happened that there was file 'default' created in the same
+directory where mkisofs is executed from and mkisofs thought that it's
+charset definition file. Mkisofs opened the file and exited with error.
+I would like to avoid that by ensuring that builtin charset definition
+is used.
+
+According to man page it should be possible to force builtin charset
+definition usage by ensuring that -input-charset argument is one of the
+builtins. Since mkisofs behaves differently than described in man, I
+suppose it's a bug.
+
+
+
+
+&gt;<i> &gt; $ truss -t open mkisofs -input-charset iso8859-1
+</I>&gt;<i> &gt; open(&quot;/var/ld/ld.config&quot;, O_RDONLY)             Err#2 ENOENT
+</I>&gt;<i> &gt; open(&quot;/lib/libc.so.1&quot;, O_RDONLY)                = 3
+</I>&gt;<i> &gt; open(&quot;iso8859-1&quot;, O_RDONLY)                     Err#2 ENOENT     &lt;---------------
+</I>&gt;<i> &gt; open(&quot;/usr/lib/siconv/iso8859-1&quot;, O_RDONLY)     = 3     &lt;---------------
+</I>&gt;<i> &gt; open(&quot;cp10000&quot;, O_RDONLY)                       Err#2 ENOENT
+</I>&gt;<i> &gt; open(&quot;/usr/lib/siconv/cp10000&quot;, O_RDONLY)       = 3
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I tried it on linux too:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; $ strace ./a/cdrtools-3.01/mkisofs/OBJ/i686-linux-cc/mkisofs -input-charset iso8859-2 -o a.iso b 2&gt;&amp;1 | grep 8859
+</I>&gt;<i> &gt; execve(&quot;./a/cdrtools-3.01/mkisofs/OBJ/i686-linux-cc/mkisofs&quot;, [&quot;./a/cdrtools-3.01/mkisofs/OBJ/i6&quot;..., &quot;-input-charset&quot;, &quot;iso8859-2&quot;, &quot;-o&quot;, &quot;a.iso&quot;, &quot;b&quot;], [/* 82 vars */]) = 0
+</I>&gt;<i> &gt; open(&quot;iso8859-2&quot;, O_RDONLY)             = -1 ENOENT (No such file or directory)    &lt;--------------
+</I>&gt;<i> &gt; stat64(&quot;/home/neuron/Downloads/a/cdrtools-3.01/mkisofs/OBJ/i686-linux-cc/lib/siconv/iso8859-1&quot;, 0xbfa01830) = -1 ENOENT (No such file or directory)
+</I>&gt;<i> &gt; stat64(&quot;/usr/lib/siconv/iso8859-1&quot;, 0xbfa01830) = -1 ENOENT (No such file or directory)  &lt;--------------
+</I>&gt;<i> &gt; ...
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; It seems to be caused by pfopen function:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; LOCAL FILE *
+</I>&gt;<i> &gt; pfopen(name)
+</I>&gt;<i> &gt;         char    *name;
+</I>&gt;<i> &gt; {
+</I>&gt;<i> &gt;         char    path[1024];
+</I>&gt;<i> &gt;         FILE    *f;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;         if ((f = fopen(name, &quot;r&quot;)) != NULL)          &lt;---------------
+</I>&gt;<i> &gt;                 return (f);
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;         if (strchr(name, '/'))
+</I>&gt;<i> &gt;                 return ((FILE *)NULL);
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;         snprintf(path, sizeof (path), &quot;%s/lib/siconv/%s&quot;, INS_BASE, name);
+</I>&gt;<i> &gt;         return (fopen(path, &quot;r&quot;));          &lt;---------------
+</I>&gt;<i> &gt; }
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Shouldn't the two fopen calls be reversed?
+</I>&gt;<i> 
+</I>&gt;<i> This  is an outdated version of libsiconv.
+</I>
+That's correct. But the version I tested on Linux was latest and it
+behaves in the same way. 
+
+
+
+&gt;<i> Why do you use an outdated version?
+</I>
+We would like to use stable version. Latest is in the directory 'alpha',
+which suggests that it may not be as stable as the release 3.00. And I
+already tried latest (cdrtools-3.01a08) which does not solve the issue
+too.
+
+
+
+&gt;<i> Since 2010, libsiconv uses a dynamic method to find it's installation base.
+</I>
+I can see that the function pfopen is now more complex. So if I'm
+calling mkisofs from a wrapper, it's even more difficult to ensure that
+only builtin character encoding is used.
+
+Thank you
+-- 
+	Vlad
+</PRE>
+
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000112.html">[Cdrecord-developers] charsed definition file read even though charset exists
+</A></li>
+	<LI>Next message: <A HREF="000114.html">[Cdrecord-developers] charsed definition file read even though charset exists
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#113">[ date ]</a>
+              <a href="thread.html#113">[ thread ]</a>
+              <a href="subject.html#113">[ subject ]</a>
+              <a href="author.html#113">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">More information about the Cdrecord-developers
+mailing list</a><br>
+</body></html>

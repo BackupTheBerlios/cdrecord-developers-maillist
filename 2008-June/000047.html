@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cdrecord-developers] [patch] restore trailing null for -root graft	point
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cdrecord-developers/2008-June/index.html" >
+   <LINK REL="made" HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20%5Bpatch%5D%20restore%20trailing%20null%20for%20-root%20graft%0A%09point&In-Reply-To=%3C20080608013801.GA39767%40clockwork.private.drycold.ca%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000048.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cdrecord-developers] [patch] restore trailing null for -root graft	point</H1>
+    <B>Ben Korvemaker</B> 
+    <A HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20%5Bpatch%5D%20restore%20trailing%20null%20for%20-root%20graft%0A%09point&In-Reply-To=%3C20080608013801.GA39767%40clockwork.private.drycold.ca%3E"
+       TITLE="[Cdrecord-developers] [patch] restore trailing null for -root graft	point">neb at drycold.ca
+       </A><BR>
+    <I>Sun Jun  8 03:38:02 CEST 2008</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000048.html">[Cdrecord-developers] [patch] restore trailing null for -root graft point
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#47">[ date ]</a>
+              <a href="thread.html#47">[ thread ]</a>
+              <a href="subject.html#47">[ subject ]</a>
+              <a href="author.html#47">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>This was triggered by building using the default compiler (gcc 4.2.1) on
+FreeBSD 7, and the latest alpha version (as well as the versions in freebsd
+ports). Using 'mkisofs -root myroot -o image.iso MD5SUMS SHA1SUMS', it was
+reporting:
+
+mkisofs: Error: 'MD5SUMS' and 'SHA1SUMS' have the same Rock Ridge name 'fsrc'.
+
+For more files, it'd report conflicts for every pair of files.
+
+Regardless of whether or not the argument to -root ends in /, the trailing
+null is replaced with a '/'. As the buffer for the graft_point is on the
+stack, but not initialized, it may contain other data. Here's a patch to
+address this.
+
+--- cdrtools-2.01.01/mkisofs/mkisofs.c	2008-05-18 08:21:25.000000000 -0400
++++ cdrtools-2.01.01-new/mkisofs/mkisofs.c	2008-06-07 21:01:01.000000000 -0400
+@@ -3194,8 +3194,10 @@ get_graft(arg, graft_point, glen, nodena
+ 		if (reloc_root != NULL) {
+ 			strlcpy(graft_point, reloc_root, PATH_MAX + 1);
+ 			len = strlen(graft_point);
+-			if (graft_point[len] != '/')
+-				graft_point[len++] = '/';
++			if (graft_point[len] != '/') {
++				strncat(graft_point, &quot;/&quot;, PATH_MAX +1);
++				len = strlen(graft_point);
++			}
+ 		} else {
+ 			len = 0;
+ 		}
+
+-- 
+Ben Korvemaker
+<A HREF="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">neb at drycold.ca</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000048.html">[Cdrecord-developers] [patch] restore trailing null for -root graft point
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#47">[ date ]</a>
+              <a href="thread.html#47">[ thread ]</a>
+              <a href="subject.html#47">[ subject ]</a>
+              <a href="author.html#47">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">More information about the Cdrecord-developers
+mailing list</a><br>
+</body></html>

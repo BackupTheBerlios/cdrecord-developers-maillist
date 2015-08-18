@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cdrecord-developers] charsed definition file read even though charset exists
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cdrecord-developers/2014-February/index.html" >
+   <LINK REL="made" HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20charsed%20definition%20file%20read%20even%20though%0A%20charset%20exists&In-Reply-To=%3C20140203213716.GE29715%40virt.cz.oracle.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cdrecord-developers] charsed definition file read even though charset exists</H1>
+    <B>Vladimir Marek</B> 
+    <A HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20charsed%20definition%20file%20read%20even%20though%0A%20charset%20exists&In-Reply-To=%3C20140203213716.GE29715%40virt.cz.oracle.com%3E"
+       TITLE="[Cdrecord-developers] charsed definition file read even though charset exists">Vladimir.Marek at oracle.com
+       </A><BR>
+    <I>Mon Feb  3 22:37:16 CET 2014</I>
+    <P><UL>
+        
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#134">[ date ]</a>
+              <a href="thread.html#134">[ thread ]</a>
+              <a href="subject.html#134">[ subject ]</a>
+              <a href="author.html#134">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;<i> &gt; &gt; It seems that you need the patches because you are using an old version of 
+</I>&gt;<i> &gt; &gt; cdrtoos.
+</I>&gt;<i> &gt; &gt; 
+</I>&gt;<i> &gt; &gt; BTW: the recent version no longer needs a shell script to do the pfexec and I 
+</I>&gt;<i> &gt; &gt; am plannuing to enhance Solaris to even avoid the re-exec() that is still 
+</I>&gt;<i> &gt; &gt; needed to get the needed privileges.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; It would be shame to not ship it :) I'll try to find out more about the
+</I>&gt;<i> &gt; patches, whether there were any tests etc.
+</I>&gt;<i> 
+</I>&gt;<i> Please test and report.
+</I>&gt;<i> There have been many bug-fixes since 3.00 and it may be worth just for the 
+</I>&gt;<i> bug-fixes.
+</I>
+All seems to be fine, there's some incompatibility with the patches we
+used though (in how -eltorito-platform and -eltorito-alt-boot) options
+are used, Your implementation seems to be the correct one to me though
+:<i>) I'll be working on getting latest alpha (which includes the fix I
+</I>requested !) to our development solaris vesion and then to s11.
+
+
+&gt;<i> &gt; &gt; &gt; Also, even though I can speak German a tiny bit (I have been working in
+</I>&gt;<i> &gt; &gt; &gt; M&#252;nchen for some time), I am a bit lost in the Changelog :)
+</I>&gt;<i> &gt; &gt; 
+</I>&gt;<i> &gt; &gt; Where are you located?
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I'm from Prague, we even met once very shortly on some Sun event here.
+</I>&gt;<i> 
+</I>&gt;<i> I believe this was in late 2004 together with Frank Hofmann.
+</I>
+Yes, very good memory!
+
+Thank you for your help.
+-- 
+	Vlad
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#134">[ date ]</a>
+              <a href="thread.html#134">[ thread ]</a>
+              <a href="subject.html#134">[ subject ]</a>
+              <a href="author.html#134">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">More information about the Cdrecord-developers
+mailing list</a><br>
+</body></html>

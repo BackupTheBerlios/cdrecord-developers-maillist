@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cdrecord-developers] CD-Text question
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cdrecord-developers/2010-June/index.html" >
+   <LINK REL="made" HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20CD-Text%20question&In-Reply-To=%3C4C051A7D.40006%40novadsp.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000101.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cdrecord-developers] CD-Text question</H1>
+    <B>g4 at novadsp.com</B> 
+    <A HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20CD-Text%20question&In-Reply-To=%3C4C051A7D.40006%40novadsp.com%3E"
+       TITLE="[Cdrecord-developers] CD-Text question">g4 at novadsp.com
+       </A><BR>
+    <I>Tue Jun  1 16:34:37 CEST 2010</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000101.html">[Cdrecord-developers] cdrtools-3.0-final is close, please test!!!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#100">[ date ]</a>
+              <a href="thread.html#100">[ thread ]</a>
+              <a href="subject.html#100">[ subject ]</a>
+              <a href="author.html#100">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Can anyone clarify a question for me? I do not have access to the Red 
+Book and there is limited coverage in the MMC3 spec/Sony CD-Text 
+documentation.
+
+When writing CD-Text in SAO mode, with the first cue sheet form byte set 
+to 0x41, is the CD-Text data aligned to the block that stretches from 
+the first writeable lead-in block (obtained via Get ATIP) to LBA -1?
+
+i.e.
+
+Initial LBA of -11745 from Get ATIP call
+Final LBA -1
+Sector size of 2352 bytes (CD-DA audio)
+= 27,621,888 bytes total
+
+Given 864 bytes of 6 bit encoded data, is this is written repeatedly 
+31969 times across the lead-in with the remaining 672 bytes of data set 
+to 0 as the end of CD-Text marker?
+
+Perhaps more simply put is the data aligned to the header rather than 
+the sector size?
+
+Any help greatly appreciated.
+
+Many thanks
+
+G4.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/cdrecord-developers/attachments/20100601/e40234ec/attachment.html">https://lists.berlios.de/pipermail/cdrecord-developers/attachments/20100601/e40234ec/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000101.html">[Cdrecord-developers] cdrtools-3.0-final is close, please test!!!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#100">[ date ]</a>
+              <a href="thread.html#100">[ thread ]</a>
+              <a href="subject.html#100">[ subject ]</a>
+              <a href="author.html#100">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">More information about the Cdrecord-developers
+mailing list</a><br>
+</body></html>

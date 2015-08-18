@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cdrecord-developers] charsed definition file read even though charset exists
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cdrecord-developers/2012-September/index.html" >
+   <LINK REL="made" HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20charsed%20definition%20file%20read%20even%20though%0A%20charset%20exists&In-Reply-To=%3C5044c136.bYuVEc3ZvlbCydnO%25Joerg.Schilling%40fokus.fraunhofer.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000113.html">
+   <LINK REL="Next"  HREF="000115.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cdrecord-developers] charsed definition file read even though charset exists</H1>
+    <B>Joerg Schilling</B> 
+    <A HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20charsed%20definition%20file%20read%20even%20though%0A%20charset%20exists&In-Reply-To=%3C5044c136.bYuVEc3ZvlbCydnO%25Joerg.Schilling%40fokus.fraunhofer.de%3E"
+       TITLE="[Cdrecord-developers] charsed definition file read even though charset exists">Joerg.Schilling at fokus.fraunhofer.de
+       </A><BR>
+    <I>Mon Sep  3 16:39:50 CEST 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000113.html">[Cdrecord-developers] charsed definition file read even though charset exists
+</A></li>
+        <LI>Next message: <A HREF="000115.html">[Cdrecord-developers] charsed definition file read even though charset exists
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#114">[ date ]</a>
+              <a href="thread.html#114">[ thread ]</a>
+              <a href="subject.html#114">[ subject ]</a>
+              <a href="author.html#114">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Vladimir Marek &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">Vladimir.Marek at oracle.com</A>&gt; wrote:
+
+&gt;<i> &gt; &gt; mkisofs man page says:
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt;      If using non iconv(1) based character sets, additional char-
+</I>&gt;<i> &gt; &gt;      acter  sets  can  be read from file for any of the character
+</I>&gt;<i> &gt; &gt;      set options by giving a filename  as  the  argument  to  the
+</I>&gt;<i> &gt; &gt;      options.  The  given file will only be read if its name does
+</I>&gt;<i> &gt; &gt;      not match one of the built in character sets.
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; That does not seem to be happening, the given file name is read even if the
+</I>&gt;<i> &gt; &gt; built in character set exists.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Sure?
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; What do you believe is your problem?
+</I>&gt;<i>
+</I>&gt;<i> I want mkisofs to use only builtin character set definitions. Because it
+</I>&gt;<i> already happened that there was file 'default' created in the same
+</I>&gt;<i> directory where mkisofs is executed from and mkisofs thought that it's
+</I>&gt;<i> charset definition file. Mkisofs opened the file and exited with error.
+</I>&gt;<i> I would like to avoid that by ensuring that builtin charset definition
+</I>&gt;<i> is used.
+</I>
+Maybe there is a missunderstanding at your side. The manpage still talks about 
+&quot;builtin&quot; charsets, but charsets that are really builtin into mkliaofs have 
+gone more than 5 years ago when iconv support was added to support more complex 
+charsets.
+
+It seems that the charset name &quot;default&quot; (which is the only left builtin 
+charset) needs to get precedence before file name based translations.
+
+
+&gt;<i> According to man page it should be possible to force builtin charset
+</I>&gt;<i> definition usage by ensuring that -input-charset argument is one of the
+</I>&gt;<i> builtins. Since mkisofs behaves differently than described in man, I
+</I>&gt;<i> suppose it's a bug.
+</I>
+OK, it may be a good idea to first search the default translation table 
+location before looking in the current directory.
+
+....or to look at non-default-path files only in case the charset name contains 
+a slash to denote a path name. This would mean that a name in the current 
+directory would have to be named &quot;./coding&quot;.
+
+
+&gt;<i> &gt; This  is an outdated version of libsiconv.
+</I>&gt;<i>
+</I>&gt;<i> That's correct. But the version I tested on Linux was latest and it
+</I>&gt;<i> behaves in the same way. 
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> &gt; Why do you use an outdated version?
+</I>&gt;<i>
+</I>&gt;<i> We would like to use stable version. Latest is in the directory 'alpha',
+</I>&gt;<i> which suggests that it may not be as stable as the release 3.00. And I
+</I>&gt;<i> already tried latest (cdrtools-3.01a08) which does not solve the issue
+</I>&gt;<i> too.
+</I>
+stable means dead.
+
+This is why there is a longer testing period before something is declared 
+&quot;stable&quot;.
+
+
+&gt;<i> &gt; Since 2010, libsiconv uses a dynamic method to find it's installation base.
+</I>&gt;<i>
+</I>&gt;<i> I can see that the function pfopen is now more complex. So if I'm
+</I>&gt;<i> calling mkisofs from a wrapper, it's even more difficult to ensure that
+</I>&gt;<i> only builtin character encoding is used.
+</I>
+I don't believe so...
+
+J&#246;rg
+
+-- 
+ EMail:<A HREF="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">joerg at schily.isdn.cs.tu-berlin.de</A> (home) J&#246;rg Schilling D-13353 Berlin
+       <A HREF="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">js at cs.tu-berlin.de</A>                (uni)  
+       <A HREF="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">joerg.schilling at fokus.fraunhofer.de</A> (work) Blog: <A HREF="http://schily.blogspot.com/">http://schily.blogspot.com/</A>
+ URL:  <A HREF="http://cdrecord.berlios.de/private/">http://cdrecord.berlios.de/private/</A> <A HREF="ftp://ftp.berlios.de/pub/schily">ftp://ftp.berlios.de/pub/schily</A>
+</PRE>
+
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000113.html">[Cdrecord-developers] charsed definition file read even though charset exists
+</A></li>
+	<LI>Next message: <A HREF="000115.html">[Cdrecord-developers] charsed definition file read even though charset exists
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#114">[ date ]</a>
+              <a href="thread.html#114">[ thread ]</a>
+              <a href="subject.html#114">[ subject ]</a>
+              <a href="author.html#114">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">More information about the Cdrecord-developers
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cdrecord-developers] Native Windows version
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cdrecord-developers/2012-October/index.html" >
+   <LINK REL="made" HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20Native%20Windows%20version&In-Reply-To=%3C506d68af.zhpNriwrvPkRFOdN%25Joerg.Schilling%40fokus.fraunhofer.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000118.html">
+   <LINK REL="Next"  HREF="000120.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cdrecord-developers] Native Windows version</H1>
+    <B>Joerg Schilling</B> 
+    <A HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20Native%20Windows%20version&In-Reply-To=%3C506d68af.zhpNriwrvPkRFOdN%25Joerg.Schilling%40fokus.fraunhofer.de%3E"
+       TITLE="[Cdrecord-developers] Native Windows version">Joerg.Schilling at fokus.fraunhofer.de
+       </A><BR>
+    <I>Thu Oct  4 12:45:03 CEST 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000118.html">[Cdrecord-developers] Native Windows version
+</A></li>
+        <LI>Next message: <A HREF="000120.html">[Cdrecord-developers] Native Windows version
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#119">[ date ]</a>
+              <a href="thread.html#119">[ thread ]</a>
+              <a href="subject.html#119">[ subject ]</a>
+              <a href="author.html#119">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Pau Garcia i Quiles &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">pgquiles at elpauer.org</A>&gt; wrote:
+
+&gt;<i> Hello,
+</I>&gt;<i>
+</I>&gt;<i> Has anyone succeeded in compiling a cdrtools for Windows using MinGW
+</I>&gt;<i> and/or Visual C++? I mean a truly *native* executable, not a Cygwin
+</I>&gt;<i> one
+</I>&gt;<i>
+</I>&gt;<i> I am interested mostly in mkisofs.
+</I>
+mkisofs will not work correctly as Microsoft ships with a broken libc that
+returns 0 with stat() in st_ino for all files.
+
+This causes mkisofs to assume that all files are hardlinked .....
+
+and it is of course a hard violation of the POSIX standard.
+
+J&#246;rg
+
+-- 
+ EMail:<A HREF="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">joerg at schily.isdn.cs.tu-berlin.de</A> (home) J&#246;rg Schilling D-13353 Berlin
+       <A HREF="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">js at cs.tu-berlin.de</A>                (uni)  
+       <A HREF="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">joerg.schilling at fokus.fraunhofer.de</A> (work) Blog: <A HREF="http://schily.blogspot.com/">http://schily.blogspot.com/</A>
+ URL:  <A HREF="http://cdrecord.berlios.de/private/">http://cdrecord.berlios.de/private/</A> <A HREF="ftp://ftp.berlios.de/pub/schily">ftp://ftp.berlios.de/pub/schily</A>
+</PRE>
+
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000118.html">[Cdrecord-developers] Native Windows version
+</A></li>
+	<LI>Next message: <A HREF="000120.html">[Cdrecord-developers] Native Windows version
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#119">[ date ]</a>
+              <a href="thread.html#119">[ thread ]</a>
+              <a href="subject.html#119">[ subject ]</a>
+              <a href="author.html#119">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">More information about the Cdrecord-developers
+mailing list</a><br>
+</body></html>

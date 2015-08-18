@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cdrecord-developers] charsed definition file read even though charset exists
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cdrecord-developers/2012-September/index.html" >
+   <LINK REL="made" HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20charsed%20definition%20file%20read%20even%20though%0A%20charset%20exists&In-Reply-To=%3C20120903150613.GC407%40tbd.cz.oracle.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000114.html">
+   <LINK REL="Next"  HREF="000116.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cdrecord-developers] charsed definition file read even though charset exists</H1>
+    <B>Vladimir Marek</B> 
+    <A HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20charsed%20definition%20file%20read%20even%20though%0A%20charset%20exists&In-Reply-To=%3C20120903150613.GC407%40tbd.cz.oracle.com%3E"
+       TITLE="[Cdrecord-developers] charsed definition file read even though charset exists">Vladimir.Marek at Oracle.COM
+       </A><BR>
+    <I>Mon Sep  3 17:06:14 CEST 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000114.html">[Cdrecord-developers] charsed definition file read even though charset exists
+</A></li>
+        <LI>Next message: <A HREF="000116.html">[Cdrecord-developers] charsed definition file read even though charset exists
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#115">[ date ]</a>
+              <a href="thread.html#115">[ thread ]</a>
+              <a href="subject.html#115">[ subject ]</a>
+              <a href="author.html#115">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>[...]
+
+&gt;<i> &gt; I want mkisofs to use only builtin character set definitions. Because it
+</I>&gt;<i> &gt; already happened that there was file 'default' created in the same
+</I>&gt;<i> &gt; directory where mkisofs is executed from and mkisofs thought that it's
+</I>&gt;<i> &gt; charset definition file. Mkisofs opened the file and exited with error.
+</I>&gt;<i> &gt; I would like to avoid that by ensuring that builtin charset definition
+</I>&gt;<i> &gt; is used.
+</I>&gt;<i> 
+</I>&gt;<i> Maybe there is a missunderstanding at your side. The manpage still talks about 
+</I>&gt;<i> &quot;builtin&quot; charsets, but charsets that are really builtin into mkliaofs have 
+</I>&gt;<i> gone more than 5 years ago when iconv support was added to support more complex 
+</I>&gt;<i> charsets.
+</I>&gt;<i> 
+</I>&gt;<i> It seems that the charset name &quot;default&quot; (which is the only left builtin 
+</I>&gt;<i> charset) needs to get precedence before file name based translations.
+</I>
+Ah, that explains. I thought &quot;buitlin&quot; = /usr/lib/siconv/*
+
+
+
+&gt;<i> &gt; According to man page it should be possible to force builtin charset
+</I>&gt;<i> &gt; definition usage by ensuring that -input-charset argument is one of the
+</I>&gt;<i> &gt; builtins. Since mkisofs behaves differently than described in man, I
+</I>&gt;<i> &gt; suppose it's a bug.
+</I>&gt;<i> 
+</I>&gt;<i> OK, it may be a good idea to first search the default translation table 
+</I>&gt;<i> location before looking in the current directory.
+</I>&gt;<i> 
+</I>&gt;<i> ....or to look at non-default-path files only in case the charset name contains 
+</I>&gt;<i> a slash to denote a path name. This would mean that a name in the current 
+</I>&gt;<i> directory would have to be named &quot;./coding&quot;.
+</I>
+Both sounds fine to me. It ensures that '-input-charset 8859-1' won't
+read anything else than /usr/lib/siconv/8859-1. I guess it depends on
+whether you want to allow to override the /usr/lib/siconv/* tables or
+not. Even if there is a bug in /usr/lib/siconv/8859-1 (for example), one
+may fix it creating local table of a different name (fix_8859-1) and use
+that.
+
+My case would best suit the order:
+
+a) try INS_BASE/lib/siconv/*
+b) try dynamic path based on getexecname
+c) try openning plain file
+
+Of course that's just me.
+
+
+[...]
+
+&gt;<i> &gt; &gt; Why do you use an outdated version?
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; We would like to use stable version. Latest is in the directory 'alpha',
+</I>&gt;<i> &gt; which suggests that it may not be as stable as the release 3.00. And I
+</I>&gt;<i> &gt; already tried latest (cdrtools-3.01a08) which does not solve the issue
+</I>&gt;<i> &gt; too.
+</I>&gt;<i> 
+</I>&gt;<i> stable means dead.
+</I>&gt;<i> 
+</I>&gt;<i> This is why there is a longer testing period before something is declared 
+</I>&gt;<i> &quot;stable&quot;.
+</I>
+Heh, I would rather see 'dead but working' than 'alive and potentialy
+broken', if possible :) But fun aside, I'll take it as recommendation to
+upgrade to latest 3.01a08.
+
+
+
+&gt;<i> &gt; &gt; Since 2010, libsiconv uses a dynamic method to find it's installation base.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I can see that the function pfopen is now more complex. So if I'm
+</I>&gt;<i> &gt; calling mkisofs from a wrapper, it's even more difficult to ensure that
+</I>&gt;<i> &gt; only builtin character encoding is used.
+</I>&gt;<i> 
+</I>&gt;<i> I don't believe so...
+</I>
+If you will be willing to accept either of those solutions discussed
+above, it's irrelevant.
+
+
+Thank you
+-- 
+	Vlad
+</PRE>
+
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000114.html">[Cdrecord-developers] charsed definition file read even though charset exists
+</A></li>
+	<LI>Next message: <A HREF="000116.html">[Cdrecord-developers] charsed definition file read even though charset exists
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#115">[ date ]</a>
+              <a href="thread.html#115">[ thread ]</a>
+              <a href="subject.html#115">[ subject ]</a>
+              <a href="author.html#115">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">More information about the Cdrecord-developers
+mailing list</a><br>
+</body></html>

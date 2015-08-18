@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cdrecord-developers] Linking libschily to libintl
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cdrecord-developers/2012-July/index.html" >
+   <LINK REL="made" HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20Linking%20libschily%20to%20libintl&In-Reply-To=%3C87ehoe9nwu.fsf%40elisp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cdrecord-developers] Linking libschily to libintl</H1>
+    <B>Naohiro Aota</B> 
+    <A HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20Linking%20libschily%20to%20libintl&In-Reply-To=%3C87ehoe9nwu.fsf%40elisp.net%3E"
+       TITLE="[Cdrecord-developers] Linking libschily to libintl">naota at gentoo.org
+       </A><BR>
+    <I>Sat Jul 14 20:51:29 CEST 2012</I>
+    <P><UL>
+        
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#108">[ date ]</a>
+              <a href="thread.html#108">[ thread ]</a>
+              <a href="subject.html#108">[ subject ]</a>
+              <a href="author.html#108">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+When I tried to build cdrecord on FreeBSD, I got build failure like this:
+
+gmake[1]: Entering directory `/var/tmp/portage/app-cdr/cdrtools-3.01_alpha06/work/cdrtools-3.01/rscsi'
+i686-gentoo-freebsd8.2-gcc -O -O2 -march=native -pipe -fomit-frame-pointer -finput-charset=ISO-8859-1 -fexec-charset=UTF-8 -DSCHILY_BUILD -IOBJ/x86-fbsd-freebsd-cc -I../incs/x86-fbsd-freebsd-cc -I../include -I/usr/local/include -I../libscg -c -o OBJ/x86-fbsd-freebsd-cc/rscsi.o rscsi.c  
+        ==&gt; LINKING &quot;OBJ/x86-fbsd-freebsd-cc/rscsi&quot;
+../libs/x86-fbsd-freebsd-cc/pic/libschily.so: undefined reference to `libintl_gettext'
+collect2: ld returned 1 exit status
+gmake[1]: *** [OBJ/x86-fbsd-freebsd-cc/rscsi] Error 1
+gmake[1]: Leaving directory `/var/tmp/portage/app-cdr/cdrtools-3.01_alpha06/work/cdrtools-3.01/rscsi'
+gmake: *** [all] Error 2
+
+Complete build log is available here:
+<A HREF="https://395163.bugs.gentoo.org/attachment.cgi?id=296261">https://395163.bugs.gentoo.org/attachment.cgi?id=296261</A>
+
+Please take a look at this patch to link libschily to libintl and solve
+this build issue.
+
+Regards,
+
+diff --git a/libschily/shlschily.mk b/libschily/shlschily.mk
+index 3280b39..ea92050 100644
+--- a/libschily/shlschily.mk
++++ b/libschily/shlschily.mk
+@@ -14,7 +14,7 @@ CPPOPTS +=	-Istdio
+ CPPOPTS +=	-DUSE_SCANSTACK	# Try to scan stack frames
+ CPPOPTS +=	-DPORT_ONLY	# Add missing funcs line snprintf for porting
+ include		Targets
+-LIBS=		-lc
++LIBS=		-lc $(LIB_INTL)
+ 
+ ###########################################################################
+ include		$(SRCROOT)/$(RULESDIR)/rules.shl
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#108">[ date ]</a>
+              <a href="thread.html#108">[ thread ]</a>
+              <a href="subject.html#108">[ subject ]</a>
+              <a href="author.html#108">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">More information about the Cdrecord-developers
+mailing list</a><br>
+</body></html>

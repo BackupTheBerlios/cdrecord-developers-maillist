@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cdrecord-developers] Hald polling device interfering with cdrecord?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cdrecord-developers/2007-September/index.html" >
+   <LINK REL="made" HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20Hald%20polling%20device%20interfering%20with%20cdrecord%3F&In-Reply-To=%3C20070929141832.GA5662%40section-eight%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000030.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cdrecord-developers] Hald polling device interfering with cdrecord?</H1>
+    <B>Sebastian Kemper</B> 
+    <A HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20Hald%20polling%20device%20interfering%20with%20cdrecord%3F&In-Reply-To=%3C20070929141832.GA5662%40section-eight%3E"
+       TITLE="[Cdrecord-developers] Hald polling device interfering with cdrecord?">sebastian_ml at gmx.net
+       </A><BR>
+    <I>Sat Sep 29 16:18:32 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000030.html">[Cdrecord-developers] [Patch] -as-needed compatibility
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#31">[ date ]</a>
+              <a href="thread.html#31">[ thread ]</a>
+              <a href="subject.html#31">[ subject ]</a>
+              <a href="author.html#31">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello J&#246;rg,
+
+I'm wondering about hald polling a drive and its influence on a
+cdrecord session. Is it possible that the polling has any ill effect
+on the process?
+
+If so, would you mind using O_EXCL when opening the drive in cdrecord
+to block hald?
+
+Here's what happens when I burn a DVD with k3b/growisofs:
+
+ps -A f|grep hald
+ 3110 ?        Ss     0:00 /usr/sbin/hald --use-syslog --verbose=no
+ 3111 ?        S      0:00  \_ hald-runner
+ 3119 ?        S      0:00      \_ /usr/libexec/hald-addon-acpi
+ 3128 ?        D      0:00      \_ hald-addon-storage: no polling because /dev/hdc is locked via O_EXCL
+ 3130 ?        D      0:00      \_ hald-addon-storage: polling /dev/hdd (every 2 sec)
+ 3132 ?        S      0:00      \_ hald-addon-storage: polling /dev/sda (every 2 sec)
+22801 pts/1    S+     0:00      \_ grep --colour=auto hald
+
+If hald's polling is a non-issue please disregard this request.
+
+Regards
+Sebastian
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000030.html">[Cdrecord-developers] [Patch] -as-needed compatibility
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#31">[ date ]</a>
+              <a href="thread.html#31">[ thread ]</a>
+              <a href="subject.html#31">[ subject ]</a>
+              <a href="author.html#31">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">More information about the Cdrecord-developers
+mailing list</a><br>
+</body></html>

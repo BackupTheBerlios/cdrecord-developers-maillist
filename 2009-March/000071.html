@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cdrecord-developers] Bug? cdrecord hangs and uses up to 100%	cpu
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cdrecord-developers/2009-March/index.html" >
+   <LINK REL="made" HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20Bug%3F%20cdrecord%20hangs%20and%20uses%20up%20to%20100%25%0A%09cpu&In-Reply-To=%3C200903261452.59324.trueg%40k3b.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000070.html">
+   <LINK REL="Next"  HREF="000072.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cdrecord-developers] Bug? cdrecord hangs and uses up to 100%	cpu</H1>
+    <B>Sebastian Tr&#252;g</B> 
+    <A HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20Bug%3F%20cdrecord%20hangs%20and%20uses%20up%20to%20100%25%0A%09cpu&In-Reply-To=%3C200903261452.59324.trueg%40k3b.org%3E"
+       TITLE="[Cdrecord-developers] Bug? cdrecord hangs and uses up to 100%	cpu">trueg at k3b.org
+       </A><BR>
+    <I>Thu Mar 26 14:52:58 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000070.html">[Cdrecord-developers] Bug? cdrecord hangs and uses up to 100%	cpu
+</A></li>
+        <LI>Next message: <A HREF="000072.html">[Cdrecord-developers] Bug? cdrecord hangs and uses up to 100%	cpu
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#71">[ date ]</a>
+              <a href="thread.html#71">[ thread ]</a>
+              <a href="subject.html#71">[ subject ]</a>
+              <a href="author.html#71">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thursday 26 March 2009 13:17:31 Joerg Schilling wrote:
+&gt;<i> Sebastian Tr&#252;g &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">trueg at k3b.org</A>&gt; wrote:
+</I>&gt;<i> &gt; &gt; to find where the hang is?
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; would love to but I dont have any of those commands. pstack failed to
+</I>&gt;<i> &gt; compile here on amd64 and gcore is not available at all... :(
+</I>&gt;<i> &gt; Any other output I may produce? I could compile cdrecord with debugging
+</I>&gt;<i> &gt; symbols...
+</I>&gt;<i>
+</I>&gt;<i> if you have no working dbx (dbx prints a readable stack trace even for
+</I>&gt;<i> stripped binaries), you would need to compile for gdb....see README.compile
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Then you could e.g. call
+</I>&gt;<i>
+</I>&gt;<i> kill -ILL &lt;cdrecord pid&gt;
+</I>&gt;<i>
+</I>&gt;<i> and then call
+</I>&gt;<i>
+</I>&gt;<i> gdb cdrecord core
+</I>&gt;<i> where
+</I>
+please find attached the backtrace. It is short but at least it shows the 
+area...
+-------------- next part --------------
+movebytes (fromv=0x1e49270, tov=0x1e5c000, cnt=0) at movebytes.c:42
+42              if ((n = cnt) &lt;= 0)
+(gdb) bt
+#0  movebytes (fromv=0x1e49270, tov=0x1e5c000, cnt=0) at movebytes.c:42
+#1  0x00000000004104b0 in write_cdtext (scgp=0x1e49290, dp=0x1e5a8c0, startsec=-11933) at cdtext.c:480
+#2  0x000000000041884c in write_leadin_mmc (scgp=0x1e49290, dp=0x1e5a8c0, trackp=0x7fff10949fd0) at drv_mmc.c:1847
+#3  0x0000000000409f0e in main (ac=&lt;value optimized out&gt;, av=&lt;value optimized out&gt;) at cdrecord.c:1280
+
+gdb) step
+125     }
+(gdb)
+write_cdtext (scgp=0x1e49290, dp=0x1e5a8c0, startsec=-11933) at cdtext.c:479
+479                     for (idx = 0; (idx + textlen) &lt;= maxdma; idx += textlen)
+(gdb)
+480                             movebytes(textsub, &amp;bp[idx], textlen);
+(gdb)
+movebytes (fromv=0x1e49270, tov=0x1e5c000, cnt=0) at movebytes.c:36
+36              register char           *to     = tov;
+(gdb)
+42              if ((n = cnt) &lt;= 0)
+(gdb)
+125     }
+(gdb)
+write_cdtext (scgp=0x1e49290, dp=0x1e5a8c0, startsec=-11933) at cdtext.c:479
+479                     for (idx = 0; (idx + textlen) &lt;= maxdma; idx += textlen)
+(gdb)
+480                             movebytes(textsub, &amp;bp[idx], textlen);
+(gdb)
+movebytes (fromv=0x1e49270, tov=0x1e5c000, cnt=0) at movebytes.c:36
+36              register char           *to     = tov;
+(gdb)
+42              if ((n = cnt) &lt;= 0)
+(gdb)
+125     }
+(gdb)
+write_cdtext (scgp=0x1e49290, dp=0x1e5a8c0, startsec=-11933) at cdtext.c:479
+479                     for (idx = 0; (idx + textlen) &lt;= maxdma; idx += textlen)
+(gdb)
+480                             movebytes(textsub, &amp;bp[idx], textlen);
+(gdb)
+movebytes (fromv=0x1e49270, tov=0x1e5c000, cnt=0) at movebytes.c:36
+36              register char           *to     = tov;
+(gdb)
+42              if ((n = cnt) &lt;= 0)
+(gdb)
+125     }
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000070.html">[Cdrecord-developers] Bug? cdrecord hangs and uses up to 100%	cpu
+</A></li>
+	<LI>Next message: <A HREF="000072.html">[Cdrecord-developers] Bug? cdrecord hangs and uses up to 100%	cpu
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#71">[ date ]</a>
+              <a href="thread.html#71">[ thread ]</a>
+              <a href="subject.html#71">[ subject ]</a>
+              <a href="author.html#71">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">More information about the Cdrecord-developers
+mailing list</a><br>
+</body></html>

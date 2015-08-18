@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cdrecord-developers] charsed definition file read even though charset exists
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cdrecord-developers/2014-January/index.html" >
+   <LINK REL="made" HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20charsed%20definition%20file%20read%20even%20though%0A%20charset%20exists&In-Reply-To=%3C20140113152631.GF3489%40virt.cz.oracle.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000129.html">
+   <LINK REL="Next"  HREF="000131.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cdrecord-developers] charsed definition file read even though charset exists</H1>
+    <B>Vladimir Marek</B> 
+    <A HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20charsed%20definition%20file%20read%20even%20though%0A%20charset%20exists&In-Reply-To=%3C20140113152631.GF3489%40virt.cz.oracle.com%3E"
+       TITLE="[Cdrecord-developers] charsed definition file read even though charset exists">Vladimir.Marek at oracle.com
+       </A><BR>
+    <I>Mon Jan 13 16:26:31 CET 2014</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000129.html">[Cdrecord-developers] charsed definition file read even though charset exists
+</A></li>
+        <LI>Next message: <A HREF="000131.html">[Cdrecord-developers] charsed definition file read even though charset exists
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#130">[ date ]</a>
+              <a href="thread.html#130">[ thread ]</a>
+              <a href="subject.html#130">[ subject ]</a>
+              <a href="author.html#130">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+&gt;<i> &gt; I would like to follow up with this old thread to finish what we
+</I>&gt;<i> &gt; started. The problem was that there was not a way how to specify which
+</I>&gt;<i> &gt; siconv table should be used. Specifying just it's name first looks into
+</I>&gt;<i> &gt; current directory whether there is such file, which can lead to various
+</I>&gt;<i> &gt; side effects.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Your proposal was:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; &gt; My proposal was:
+</I>&gt;<i> &gt; &gt; 
+</I>&gt;<i> &gt; &gt; 1) try to open as filename in case the parameter is a string contraining a '/'.
+</I>&gt;<i> &gt; &gt; 2) try to open path based on getexecname
+</I>&gt;<i> &gt; &gt; 3) try to open via INS_BASE/lib/siconv/* 
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; How would you feel about the attached patch?
+</I>&gt;<i> 
+</I>&gt;<i> Looks OK, sorry for the delay.
+</I>
+Thank you, my delay was &quot;slightly&quot; longer.
+
+
+&gt;<i> BTW: a month ago, I received a mail from a friend that claims that Oracle 
+</I>&gt;<i> Solaris-11.1 is shipped with a very old version of cdrtools (2.01 from 2004).
+</I>&gt;<i> 
+</I>&gt;<i> Could you comment this please?
+</I>
+Solaris 10 - cdrtools 2.01
+Solaris 11 - cdrtools 3.00
+
+Solaris 10 is in sustaining mode only, only if customer reports an issue
+or there's security problem we do something about it. And even then
+usually just the smallest change, so probably just patch fixing the one
+issue.
+
+Solaris 10 is 9 years old if I count right.
+
+Now on bare 11.1 (without any additional changes released later):
+
+&gt;<i> $ pkg list entire
+</I>&gt;<i> NAME (PUBLISHER)                                  VERSION                    IFO
+</I>&gt;<i> entire                                            0.5.11-0.175.1.0.0.24.2    i--
+</I>&gt;<i> 
+</I>&gt;<i> $ cat /etc/release 
+</I>&gt;<i>                              Oracle Solaris 11.1 X86
+</I>&gt;<i>   Copyright (c) 1983, 2012, Oracle and/or its affiliates.  All rights reserved.
+</I>&gt;<i>                            Assembled 19 September 2012
+</I>&gt;<i> 
+</I>&gt;<i> $ /usr/bin/cdrecord -version
+</I>&gt;<i> Cdrecord-ProDVD-ProBD-Clone 3.00 (i386-pc-solaris2.11) Copyright (C) 1995-2010 J&#65533;rg Schilling
+</I>
+I just noticed that your name is not displayed correctly (umlaut o), but
+that seems to be because I'm using utf-8 output (I am normally able to
+read and write &#246;)
+
+In 11 and current development version we are using 3.00 which is still
+old. I know we discussed it back then and I was surprised that you are
+suggesting your alpha releases. I brought that to our attention this
+morning internally that we should update to latest. The thing is that we
+have bunch of custom patches[1] which make possible to make Solaris
+bootable.
+
+I tried to check how hard would be to merge the patches with your latest
+release, but I haven't found any repository, only releases on ftp. I
+want to import the releases locally into mercurial and see how well the
+patches will be applicable. I haven't seen the patches before, so I
+can't comment on them more at the moment, but it would be great if you
+would have the time to look at them. Just to have rough idea of how you
+like/dislike what they are doing, what are the chances of merging the
+work with upstream.
+
+Also, even though I can speak German a tiny bit (I have been working in
+M&#252;nchen for some time), I am a bit lost in the Changelog :)
+
+[1] <A HREF="https://java.net/projects/solaris-userland/sources/gate/show/components/cdrtools/patches">https://java.net/projects/solaris-userland/sources/gate/show/components/cdrtools/patches</A>
+
+Thank you
+-- 
+	Vlad
+</PRE>
+
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000129.html">[Cdrecord-developers] charsed definition file read even though charset exists
+</A></li>
+	<LI>Next message: <A HREF="000131.html">[Cdrecord-developers] charsed definition file read even though charset exists
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#130">[ date ]</a>
+              <a href="thread.html#130">[ thread ]</a>
+              <a href="subject.html#130">[ subject ]</a>
+              <a href="author.html#130">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">More information about the Cdrecord-developers
+mailing list</a><br>
+</body></html>

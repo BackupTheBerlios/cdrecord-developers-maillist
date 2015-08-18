@@ -1,0 +1,54 @@
+From Vladimir.Marek at oracle.com  Mon Feb  3 22:37:16 2014
+From: Vladimir.Marek at oracle.com (Vladimir Marek)
+Date: Mon, 3 Feb 2014 22:37:16 +0100
+Subject: [Cdrecord-developers] charsed definition file read even though
+ charset exists
+In-Reply-To: <52d41be5.CTZYb6KwAoT1ATQW%Joerg.Schilling@fokus.fraunhofer.de>
+References: <20120903140308.GA407@tbd.cz.oracle.com>
+	<5044c136.bYuVEc3ZvlbCydnO%Joerg.Schilling@fokus.fraunhofer.de>
+	<20120903150613.GC407@tbd.cz.oracle.com>
+	<5044cc3d.B3Beqm8rMBUJib97%Joerg.Schilling@fokus.fraunhofer.de>
+	<20140108221214.GJ7134@virt.cz.oracle.com>
+	<52d3fc15.epiDa8x3FhnfT5fr%Joerg.Schilling@fokus.fraunhofer.de>
+	<20140113152631.GF3489@virt.cz.oracle.com>
+	<52d416d8.wmSDDfzRQp2Y1BlB%Joerg.Schilling@fokus.fraunhofer.de>
+	<20140113165601.GH3489@virt.cz.oracle.com>
+	<52d41be5.CTZYb6KwAoT1ATQW%Joerg.Schilling@fokus.fraunhofer.de>
+Message-ID: <20140203213716.GE29715@virt.cz.oracle.com>
+
+> > > It seems that you need the patches because you are using an old version of 
+> > > cdrtoos.
+> > > 
+> > > BTW: the recent version no longer needs a shell script to do the pfexec and I 
+> > > am plannuing to enhance Solaris to even avoid the re-exec() that is still 
+> > > needed to get the needed privileges.
+> >
+> > It would be shame to not ship it :) I'll try to find out more about the
+> > patches, whether there were any tests etc.
+> 
+> Please test and report.
+> There have been many bug-fixes since 3.00 and it may be worth just for the 
+> bug-fixes.
+
+All seems to be fine, there's some incompatibility with the patches we
+used though (in how -eltorito-platform and -eltorito-alt-boot) options
+are used, Your implementation seems to be the correct one to me though
+:) I'll be working on getting latest alpha (which includes the fix I
+requested !) to our development solaris vesion and then to s11.
+
+
+> > > > Also, even though I can speak German a tiny bit (I have been working in
+> > > > M?nchen for some time), I am a bit lost in the Changelog :)
+> > > 
+> > > Where are you located?
+> >
+> > I'm from Prague, we even met once very shortly on some Sun event here.
+> 
+> I believe this was in late 2004 together with Frank Hofmann.
+
+Yes, very good memory!
+
+Thank you for your help.
+-- 
+	Vlad
+

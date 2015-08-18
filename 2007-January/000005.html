@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cdrecord-developers] query regarding cd writing
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cdrecord-developers/2007-January/index.html" >
+   <LINK REL="made" HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20query%20regarding%20cd%20writing&In-Reply-To=%3C45bfabcc.fzDybD1zERlYClAM%25Joerg.Schilling%40fokus.fraunhofer.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000004.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cdrecord-developers] query regarding cd writing</H1>
+    <B>Joerg Schilling</B> 
+    <A HREF="mailto:cdrecord-developers%40lists.berlios.de?Subject=Re%3A%20%5BCdrecord-developers%5D%20query%20regarding%20cd%20writing&In-Reply-To=%3C45bfabcc.fzDybD1zERlYClAM%25Joerg.Schilling%40fokus.fraunhofer.de%3E"
+       TITLE="[Cdrecord-developers] query regarding cd writing">Joerg.Schilling at fokus.fraunhofer.de
+       </A><BR>
+    <I>Tue Jan 30 21:34:20 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000004.html">[Cdrecord-developers] query regarding cd writing
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#5">[ date ]</a>
+              <a href="thread.html#5">[ thread ]</a>
+              <a href="subject.html#5">[ subject ]</a>
+              <a href="author.html#5">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Deelip Prusty &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">laxmi_dilu at yahoo.com</A>&gt; wrote:
+
+&gt;<i> hi frds....
+</I>&gt;<i>  
+</I>&gt;<i>  i am developing a gui interface for cdwriting using mkisofs and cdrecorder.. but getting a problem in option (dev= ATA:1,1,0) or (dev=/dev/cdrom).. if its changes the os will not work and when more than one cdwriter are their then how to find which one has to write..
+</I>&gt;<i>  
+</I>&gt;<i>  i am using system(&quot;cdrecorder -v ................&quot;)
+</I>&gt;<i>  
+</I>&gt;<i>  is their any function or class... through which can call iit...
+</I>&gt;<i>  
+</I>&gt;<i>  i need its cdrecord -devel documentation ...
+</I>
+If you read the man page for cdrecord, you will find that dev=/dev/cdrom 
+and similar are unsupported.
+
+Just use the offcial dev=b,t,l syntax and add an &quot;emergency&quot; method
+to allow manual entering of exceptional dev= parameters. This exmergency 
+method is currently only needed on Mac OS X and AIX.
+
+
+J&#246;rg
+
+-- 
+ EMail:<A HREF="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">joerg at schily.isdn.cs.tu-berlin.de</A> (home) J&#246;rg Schilling D-13353 Berlin
+       <A HREF="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">js at cs.tu-berlin.de</A>                (uni)  
+       <A HREF="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">schilling at fokus.fraunhofer.de</A>     (work) Blog: <A HREF="http://schily.blogspot.com/">http://schily.blogspot.com/</A>
+ URL:  <A HREF="http://cdrecord.berlios.de/old/private/">http://cdrecord.berlios.de/old/private/</A> <A HREF="ftp://ftp.berlios.de/pub/schily">ftp://ftp.berlios.de/pub/schily</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000004.html">[Cdrecord-developers] query regarding cd writing
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#5">[ date ]</a>
+              <a href="thread.html#5">[ thread ]</a>
+              <a href="subject.html#5">[ subject ]</a>
+              <a href="author.html#5">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cdrecord-developers">More information about the Cdrecord-developers
+mailing list</a><br>
+</body></html>
